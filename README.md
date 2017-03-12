@@ -1,2 +1,2 @@
 # authUser
-A simple login app
+A simple login app with MEAN
