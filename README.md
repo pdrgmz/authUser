@@ -1,2 +1,2 @@
 # authUser
-A simple login app with MEAN
+An simple login developed with MEAN (Mongo, Express, Angular and Node)
