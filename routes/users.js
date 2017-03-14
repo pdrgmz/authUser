@@ -35,8 +35,6 @@ router.post('/register', function (req, res) {
 	req.checkBody('username','El nombre de usuario es requerido').notEmpty();
 	req.checkBody('password','La contraseña es requerida').notEmpty();
 	req.checkBody('password2','Las contraseñas no coinciden').equals(password);
-	
-
 
 	var errors = req.validationErrors();
 
@@ -67,7 +65,7 @@ passport.use(new LocalStrategy(
    User.getUserByUsername(username, function(err, user){
    	if(err) throw err;
    	if(!user){
-   		return done(null, false, {message: 'Unknown User'});
+   		return done(null, false, {message: 'Usuario desconocido'});
    	}
 
    	User.comparePassword(password, user.password, function(err, isMatch){
@@ -92,10 +90,30 @@ passport.deserializeUser(function(id, done) {
 });
 
 router.post('/login',
-  passport.authenticate('local', {successRedirect:'/', failureRedirect:'/users/login',failureFlash: true}),
-  function(req, res) {
-    res.redirect('/');
-  });
+	  passport.authenticate('local', {successRedirect:'/', failureRedirect:'/users/login',failureFlash: true, badRequestMessage:'Ingrese usuario y contraseña'}),
+	  function(req, res) {
+	  	var username = req.body.username;
+		var password = req.body.password;
+		console.log(username +" - "+  password );
+	  	//Validation
+		req.checkBody('username','El nombre de usuario es requerido').notEmpty();
+		req.checkBody('password','La contraseña es requerida').notEmpty();
+
+		var errors = req.validationErrors();
+
+		if (errors) {
+			res.render('login',{
+				errors: errors
+			});
+		} else {
+
+	  	
+
+	  	res.redirect('/');
+	    
+	    }
+
+	  });
 
 router.get('/logout', function(req, res){
 	req.logout();
@@ -103,6 +121,7 @@ router.get('/logout', function(req, res){
 	req.flash('success_msg', 'Cerraste sesión');
 
 	res.redirect('/users/login');
+
 });
 
 module.exports = router;

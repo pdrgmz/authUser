@@ -1,5 +1,9 @@
 <h2 class="page-header">Inicio de Sesion</h2>
-
+{{#if errors}}
+	{{#each errors}}
+	<div class="alert alert-danger">{{msg}}</div>
+	{{/each}}
+{{/if}}
 <form method="post" action="/users/login">
 	<div class="form-group">
 		<label>Usuario: </label>
